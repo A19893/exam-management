@@ -37,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      // set(value) {
-      //   // Hash the password before saving it
-      //   const hashedPassword = bcrypt.hashSync(value, bcrypt.genSaltSync(10));
-      //   this.setDataValue('password', hashedPassword);
-      // }
+      set(value) {
+        // Hash the password before saving it
+        const hashedPassword = bcrypt.hashSync(value, bcrypt.genSaltSync(parseInt(process.env.SALT_ROUNDS)));
+        this.setDataValue('password', hashedPassword);
+      }
     },
     email: {
       type: DataTypes.STRING,
@@ -51,6 +51,11 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true
       }
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'user',
